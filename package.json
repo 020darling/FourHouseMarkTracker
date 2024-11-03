@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "express": "^4.19.2",
+    "express-fileupload": "^1.5.1",
+    "inquirer": "^6.5.2",
+    "mysql2": "^3.11.0",
+    "pdfkit": "^0.15.0"
+  }
+}

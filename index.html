@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[LIVE]- FOUR HOUSE TRACKER</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+      h1 {
+        font-size: 36px;
+        animation: fadeIn 2s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .score-board {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 2;
+      }
+      .house-score {
+        margin: 10px;
+        padding: 20px;
+        border-radius: 10px;
+        width: 100px;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: #fff;
+        transition: transform 0.5s;
+      }
+      .house-score span {
+        font-size: 48px;
+        font-weight: bold;
+      }
+      #redHouse {
+        background-color: #e74c3c;
+      }
+      #yellowHouse {
+        background-color: #f1c40f;
+      }
+      #blueHouse {
+        background-color: #3498db;
+      }
+      #greenHouse {
+        background-color: #2ecc71;
+      }
+      .leading {
+        font-weight: bold;
+        font-size: 24px;
+        color: #e9464e;
+        margin-top: 20px;
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+      .background-element {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        opacity: 0.3;
+        animation: float 6s ease-in-out infinite;
+      }
+      .background-element:nth-child(1) {
+        background-color: #e74c3c;
+        top: 10%;
+        left: 20%;
+      }
+      .background-element:nth-child(2) {
+        background-color: #f1c40f;
+        top: 30%;
+        left: 70%;
+      }
+      .background-element:nth-child(3) {
+        background-color: #3498db;
+        top: 60%;
+        left: 50%;
+      }
+      .background-element:nth-child(4) {
+        background-color: #2ecc71;
+        top: 80%;
+        left: 10%;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background-element"></div>
+    <div class="background-element"></div>
+    <div class="background-element"></div>
+    <div class="background-element"></div>
+    <h1>House Mark Live Tracker</h1>
+    <div class="score-board" id="scores">
+      <div class="house-score" id="redHouse">RED: <span>0</span></div>
+      <div class="house-score" id="yellowHouse">YELLOW: <span>0</span></div>
+      <div class="house-score" id="blueHouse">BLUE: <span>0</span></div>
+      <div class="house-score" id="greenHouse">GREEN: <span>0</span></div>
+    </div>
+    <div id="leadingHouse" class="leading"></div>
+
+    <script>
+      async function fetchScores() {
+        try {
+          const response = await fetch("http://localhost:3300/house-scores");
+          const data = await response.json();
+          updateScores(data);
+        } catch (error) {
+          console.error("获取分数时出错:", error);
+        }
+      }
+
+      function updateScores({ scores, leader }) {
+        const houses = ["Red", "Yellow", "Blue", "Green"];
+        houses.forEach((house) => {
+          const element = document.getElementById(
+            house.toLowerCase() + "House"
+          );
+          const currentScore = element.querySelector("span").textContent;
+          const newScore = scores[house] || 0;
+          if (currentScore !== newScore.toString()) {
+            element.style.transform = "rotateX(180deg)";
+            setTimeout(() => {
+              element.querySelector("span").textContent = newScore;
+              element.style.transform = "rotateX(0deg)";
+            }, 250);
+          }
+        });
+
+        document.getElementById(
+          "leadingHouse"
+        ).textContent = `LEADING HOUSE: ${leader}`;
+      }
+
+      // 每2分钟获取一次分数
+      fetchScores();
+      setInterval(fetchScores, 120000);
+    </script>
+  </body>
+</html>

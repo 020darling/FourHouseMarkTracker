@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FOUR HOUSE MARK TRACKER</title>
+    <style>
+      /* 原有的样式 */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+      header {
+        background-color: #e9464e;
+        color: white;
+        padding: 10px 0;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      main {
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      h1,
+      h2 {
+        color: black;
+      }
+      label,
+      input,
+      select,
+      button {
+        display: block;
+        margin-bottom: 10px;
+        width: 100%;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      form,
+      .function-form {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .hidden {
+        display: none;
+      }
+      .back-button {
+        margin-top: 10px;
+        background-color: #e9464e;
+      }
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        animation: fadeIn 0.5s;
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 5px;
+        animation: slideDown 0.5s;
+        position: relative;
+      }
+      .close {
+        color: #aaa;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes slideDown {
+        from {
+          transform: translateY(-50px);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>LKPFC FOUR HOUSE MARK TRACKER MANAGEMENT SYSTEM</h1>
+    </header>
+    <main>
+      <!-- 主菜单 -->
+      <div id="mainMenu">
+        <button type="button" onclick="showCategory('queryByCategoryMenu')">
+          Query Data By Category
+        </button>
+        <button type="button" onclick="showCategory('accurateQueryMenu')">
+          Accurate Query
+        </button>
+        <button type="button" onclick="showCategory('addDataMenu')">
+          Add Data
+        </button>
+        <button type="button" onclick="showCategory('importData')">
+          Import The Student By Using（CSV）
+        </button>
+        <button type="button" onclick="showCategory('deleteDataMenu')">
+          Delete Data
+        </button>
+        <button type="button" onclick="showCategory('modifyDataMenu')">
+          Modify data
+        </button>
+        <button type="button" onclick="showCategory('downloadReportMenu')">
+          Download The Report
+        </button>
+      </div>
+
+      <!-- Query Data By Category 菜单 -->
+      <div id="queryByCategoryMenu" class="hidden category-menu">
+        <h2>Query Data By Category</h2>
+        <button type="button" onclick="fetchData('/students')">
+          Access The Student List
+        </button>
+        <button type="button" onclick="fetchData('/events')">
+          Access The Sport Event List
+        </button>
+        <button type="button" onclick="fetchData('/scores')">
+          Access The Mark Record
+        </button>
+        <button type="button" class="back-button" onclick="goBack()">
+          Back
+        </button>
+      </div>
+
+      <!-- Accurate Query 菜单 -->
+      <div id="accurateQueryMenu" class="hidden category-menu">
+        <h2>Accurate Query</h2>
+        <button type="button" onclick="showFunction('queryByHouse')">
+          Query Students By House Name
+        </button>
+        <button type="button" onclick="showFunction('queryStudentScores')">
+          Query Result By Student ID
+        </button>
+        <button
+          type="button"
+          onclick="showFunction('queryParticipantsByEvent')"
+        >
+          Query Students By Sport Event ID
+        </button>
+        <button type="button" class="back-button" onclick="goBack()">
+          Back
+        </button>
+      </div>
+
+      <!-- Accurate Query 功能 -->
+      <!-- Query By House -->
+      <form id="queryByHouse" class="hidden function-form">
+        <h3>Query Students By House Name</h3>
+        <label for="houseName">House Name (Red, Yellow, Blue, Green):</label>
+        <input type="text" id="houseName" placeholder="Enter The House Name" />
+        <button type="button" onclick="queryByHouse()">Go!</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('accurateQueryMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Query Student Scores -->
+      <form id="queryStudentScores" class="hidden function-form">
+        <h3>Query Result By Student ID</h3>
+        <label for="studentId">Student ID:</label>
+        <input type="text" id="studentId" placeholder="Enter The Student ID" />
+        <button type="button" onclick="queryStudentScores()">Go!</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('accurateQueryMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Query Participants By Event -->
+      <form id="queryParticipantsByEvent" class="hidden function-form">
+        <h3>Query Students By Sport Event ID</h3>
+        <label for="eventId">Sport Event ID:</label>
+        <input
+          type="text"
+          id="eventId"
+          placeholder="Enter The Sport Event ID"
+        />
+        <button type="button" onclick="queryParticipantsByEvent()">Go!</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('accurateQueryMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Add Data 菜单 -->
+      <div id="addDataMenu" class="hidden category-menu">
+        <h2>Add Data</h2>
+        <button type="button" onclick="showFunction('addStudentForm')">
+          Add New Students
+        </button>
+        <button type="button" onclick="showFunction('addEventForm')">
+          Add New Sport Event
+        </button>
+        <button type="button" onclick="showFunction('addResultForm')">
+          Enter The Result
+        </button>
+        <button type="button" class="back-button" onclick="goBack()">
+          Back
+        </button>
+      </div>
+
+      <!-- Add New Students -->
+      <form id="addStudentForm" class="hidden function">
+        <h3>Add New Students</h3>
+        <label for="studentID">Student ID:</label>
+        <input
+          type="text"
+          id="studentID"
+          required
+          placeholder="ENTER THE STUDENT ID"
+        />
+        <label for="name">LEGAL NAME:</label>
+        <input
+          type="text"
+          id="name"
+          required
+          placeholder="ENTER THE LEGAL NAME"
+        />
+        <label for="age">AGE:</label>
+        <input type="number" id="age" required placeholder="ENTER THE AGE" />
+        <label for="houseID">HOUSE ID:</label>
+        <input
+          type="text"
+          id="houseID"
+          required
+          placeholder="ENTER THE HOUSE ID"
+        />
+        <button type="submit">ADD NEW STUDENT TO THE DATABASE</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('addDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Add New Sport Event -->
+      <form id="addEventForm" class="hidden function">
+        <h3>ADD NEW SPORT EVENT</h3>
+        <label for="eventName">EVENT'S NAME:</label>
+        <input
+          type="text"
+          id="eventName"
+          required
+          placeholder="ENTER THE NEW EVENT'S NAME"
+        />
+        <label for="scoreType">THE SCORE TYPE:</label>
+        <select id="scoreType" required>
+          <option value="Time">Time</option>
+          <option value="Distance">Distance</option>
+        </select>
+        <button type="submit">ADD NEW SPORT EVENT</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('addDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Enter The Result -->
+      <form id="addResultForm" class="hidden function">
+        <h3>ENTER THE RESULT</h3>
+        <label for="studentIDResult">STUDENT ID:</label>
+        <input
+          type="text"
+          id="studentIDResult"
+          required
+          placeholder="ENTER THE STUDENT ID"
+        />
+        <label for="eventIDResult">SPORT EVENT ID:</label>
+        <input
+          type="text"
+          id="eventIDResult"
+          required
+          placeholder="ENTER THE SPORT EVENT ID"
+        />
+        <label for="scoreResult">SCORE:</label>
+        <input
+          type="text"
+          id="scoreResult"
+          required
+          placeholder="ENTER THE SCORE"
+        />
+        <button type="submit">ENTER THE NEW RESULT</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('addDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Import Data -->
+      <div id="importData" class="hidden category-menu">
+        <h2>IMPORT THE STUDENT BY USING（CSV）</h2>
+        <form id="uploadForm">
+          <input type="file" id="csvFile" accept=".csv" required />
+          <button type="submit">Upload</button>
+        </form>
+        <button type="button" class="back-button" onclick="goBack()">
+          Back
+        </button>
+      </div>
+
+      <!-- DELETE DATA 菜单 -->
+      <div id="deleteDataMenu" class="hidden category-menu">
+        <h2>DELETE DATA</h2>
+        <button type="button" onclick="showFunction('deleteStudentForm')">
+          Delete The Student
+        </button>
+        <button type="button" onclick="showFunction('deleteEventForm')">
+          Delete The Sport Event
+        </button>
+        <button type="button" onclick="showFunction('deleteScoreForm')">
+          Delete The Result Record
+        </button>
+        <button type="button" onclick="deleteAllScores()">
+          DELETE ALL RESULT RECORD<b style="color: red">(!!DANGER!!)</b>
+        </button>
+        <button type="button" class="back-button" onclick="goBack()">
+          Back
+        </button>
+      </div>
+
+      <!-- Delete Student -->
+      <form id="deleteStudentForm" class="hidden function">
+        <h3>DELETE THE STUDENT</h3>
+        <label for="deleteStudentID">STUDENT ID:</label>
+        <input
+          type="text"
+          id="deleteStudentID"
+          required
+          placeholder="ENTER THE STUDENT ID"
+        />
+        <button type="submit">CONFIRM</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('deleteDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Delete Event -->
+      <form id="deleteEventForm" class="hidden function">
+        <h3>DELETE THE SPORT EVENT</h3>
+        <label for="deleteEventID">ENTER THE SPORT EVENT ID:</label>
+        <input
+          type="text"
+          id="deleteEventID"
+          required
+          placeholder="ENTER THE SPORT EVENT ID"
+        />
+        <button type="submit">CONFIRM</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('deleteDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Delete Score -->
+      <form id="deleteScoreForm" class="hidden function">
+        <h3>DELETE THE RESULT RECORD</h3>
+        <label for="deleteScoreID">THE RESULT ID:</label>
+        <input
+          type="text"
+          id="deleteScoreID"
+          required
+          placeholder="ENTER THE RESULT ID"
+        />
+        <button type="submit">CONFIRM</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('deleteDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Modify Data 菜单 -->
+      <div id="modifyDataMenu" class="hidden category-menu">
+        <h2>Modify data</h2>
+        <button type="button" onclick="showFunction('editStudentForm')">
+          Modify Student Information
+        </button>
+        <button type="button" onclick="showFunction('editEventForm')">
+          Modify The Sport Event
+        </button>
+        <button type="button" onclick="showFunction('editScoreForm')">
+          Correct The Result
+        </button>
+        <button type="button" class="back-button" onclick="goBack()">
+          Back
+        </button>
+      </div>
+
+      <!-- Edit Student Form -->
+      <form id="editStudentForm" class="hidden function">
+        <h3>MODIFY STUDENT INFORMATION</h3>
+        <label for="editStudentID">STUDENT ID(REQUIRE):</label>
+        <input
+          type="text"
+          id="editStudentID"
+          required
+          placeholder="ENTER THE STUDENT ID"
+        />
+        <label for="editName">MODIFY THE LEGAL NAME:</label>
+        <input type="text" id="editName" placeholder="ENTER THE NEW NAME" />
+        <label for="editAge">MODIFY THE AGE:</label>
+        <input type="number" id="editAge" placeholder="ENTER THE NEW AGE" />
+        <label for="editHouseID">MODIFY THE HOUSE ID:</label>
+        <input
+          type="text"
+          id="editHouseID"
+          placeholder="ENTER THE NEW HOUSE ID"
+        />
+        <button type="submit">CONFIRM MODIFY</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('modifyDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Edit Event Form -->
+      <form id="editEventForm" class="hidden function">
+        <h3>MODIFY THE SPORT EVENT</h3>
+        <label for="editEventID">SPORT EVENT ID(REQUIRE):</label>
+        <input
+          type="text"
+          id="editEventID"
+          required
+          placeholder="ENTER THE EVENT ID"
+        />
+        <label for="editEventName">MODIFY THE EVENT NAME:</label>
+        <input
+          type="text"
+          id="editEventName"
+          placeholder="ENTER THE NEW EVENT NAME"
+        />
+        <label for="editScoreType">MODIFY THE SCORE TYPE:</label>
+        <select id="editScoreType">
+          <option value="">NO ANY MODIFY</option>
+          <option value="Time">Time</option>
+          <option value="Distance">Distance</option>
+        </select>
+        <button type="submit">CONFIRM MODIFY</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('modifyDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Edit Score Form -->
+      <form id="editScoreForm" class="hidden function">
+        <h3>CORRECT THE RESULT</h3>
+        <label for="editScoreID">RESULT ID(REQUIRE):</label>
+        <input
+          type="text"
+          id="editScoreID"
+          required
+          placeholder="ENTER THE RESULT ID"
+        />
+        <label for="editScore">NEW SCORE:</label>
+        <input
+          type="text"
+          id="editScore"
+          required
+          placeholder="ENTER THE NEW SCORE"
+        />
+        <button type="submit">CONFIRM CORRECTION</button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('modifyDataMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Download The Report 菜单 -->
+      <div id="downloadReportMenu" class="hidden category-menu">
+        <h2>Download The Report</h2>
+        <button type="button" onclick="downloadStudentReport()">
+          Download The Student List
+        </button>
+        <button type="button" onclick="downloadEventReport()">
+          Download The Sport Event List
+        </button>
+        <button type="button" onclick="downloadAllScoresReport()">
+          Download All The Mark Record
+        </button>
+        <button type="button" onclick="showFunction('downloadStudentsByHouse')">
+          Download Students By House
+        </button>
+        <button type="button" onclick="showFunction('downloadScoresByStudent')">
+          Download Scores By Student
+        </button>
+        <button
+          type="button"
+          onclick="showFunction('downloadParticipantsByEvent')"
+        >
+          Download Participants By Event
+        </button>
+        <button type="button" class="back-button" onclick="goBack()">
+          Back
+        </button>
+      </div>
+
+      <!-- Download Students By House -->
+      <form id="downloadStudentsByHouse" class="hidden function-form">
+        <h3>Download Students By House</h3>
+        <label for="houseNameIP">House Name:</label>
+        <input
+          type="text"
+          id="houseNameIP"
+          placeholder="ENTER THE HOUSE NAME"
+        />
+        <button type="button" onclick="downloadStudentsByHouse()">
+          DOWNLOAD
+        </button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('downloadReportMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Download Scores By Student -->
+      <form id="downloadScoresByStudent" class="hidden function-form">
+        <h3>Download Scores By Student ID</h3>
+        <label for="studentIdInput">Student ID:</label>
+        <input
+          type="text"
+          id="studentIdInput"
+          placeholder="ENTER THE STUDENT ID"
+        />
+        <button type="button" onclick="downloadScoresByStudent()">
+          DOWNLOAD
+        </button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('downloadReportMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Download Participants By Event -->
+      <form id="downloadParticipantsByEvent" class="hidden function-form">
+        <h3>Download Participants By Event ID</h3>
+        <label for="eventIdIP">Event ID:</label>
+        <input type="text" id="eventIdIP" placeholder="ENTER THE EVENT ID" />
+        <button type="button" onclick="downloadParticipantsByEvent()">
+          DOWNLOAD
+        </button>
+        <button
+          type="button"
+          class="back-button"
+          onclick="goBackToMenu('downloadReportMenu')"
+        >
+          Back
+        </button>
+      </form>
+
+      <!-- Modal Structure -->
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <pre id="modalResult"></pre>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      /* 用于控制菜单和功能的切换 */
+      function showCategory(categoryMenuId) {
+        // 隐藏主菜单
+        document.getElementById("mainMenu").classList.add("hidden");
+        // 隐藏所有菜单和功能
+        hideAllMenusAndFunctions();
+        // 显示对应的类别菜单
+        document.getElementById(categoryMenuId).classList.remove("hidden");
+      }
+
+      function showFunction(functionId) {
+        // 隐藏所有菜单和功能
+        hideAllMenusAndFunctions();
+        // 显示对应的功能界面
+        document.getElementById(functionId).classList.remove("hidden");
+      }
+
+      function goBack() {
+        // 隐藏所有菜单和功能
+        hideAllMenusAndFunctions();
+        // 显示主菜单
+        document.getElementById("mainMenu").classList.remove("hidden");
+      }
+
+      function goBackToMenu(menuId) {
+        // 隐藏所有菜单和功能
+        hideAllMenusAndFunctions();
+        // 显示对应的类别菜单
+        document.getElementById(menuId).classList.remove("hidden");
+      }
+
+      function hideAllMenusAndFunctions() {
+        const menus = document.querySelectorAll(".category-menu");
+        const functions = document.querySelectorAll(
+          ".function, .function-form"
+        );
+        menus.forEach((menu) => menu.classList.add("hidden"));
+        functions.forEach((func) => func.classList.add("hidden"));
+      }
+
+      function openModal(content) {
+        document.getElementById("modalResult").textContent = content;
+        document.getElementById("myModal").style.display = "block";
+      }
+
+      function closeModal() {
+        document.getElementById("myModal").style.display = "none";
+      }
+
+      async function fetchData(endpoint) {
+        try {
+          const response = await fetch(`http://localhost:3300${endpoint}`);
+
+          if (response.ok) {
+            const data = await response.json();
+            openModal(JSON.stringify(data, null, 2));
+          } else {
+            const errorData = await response.text();
+            openModal(`Error fetching data: ${errorData}`);
+          }
+        } catch (error) {
+          openModal(`Error fetching data: ${error.message}`);
+        }
+      }
+
+      function queryByHouse() {
+        const houseName = document.getElementById("houseName").value.trim();
+        if (houseName) {
+          fetchData(`/students/house/${encodeURIComponent(houseName)}`);
+        } else {
+          openModal("House Name is required");
+        }
+      }
+
+      function queryStudentScores() {
+        const studentId = document.getElementById("studentId").value.trim();
+        if (studentId) {
+          fetchData(`/student/${encodeURIComponent(studentId)}`);
+        } else {
+          openModal("Student ID is required");
+        }
+      }
+
+      function queryParticipantsByEvent() {
+        const eventId = document.getElementById("eventId").value.trim();
+        if (eventId) {
+          fetchData(`/event/${encodeURIComponent(eventId)}/participants`);
+        } else {
+          openModal("Event ID is required");
+        }
+      }
+
+      // 更新所有表单提交的处理函数，以正确处理错误
+
+      document.getElementById("uploadForm").onsubmit = async function (event) {
+        event.preventDefault(); // 防止页面刷新
+        const fileInput = document.getElementById("csvFile");
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        try {
+          const response = await fetch("http://localhost:3300/upload-csv", {
+            method: "POST",
+            body: formData,
+          });
+
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error uploading file: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error uploading file: ${error.message}`);
+        }
+      };
+
+      // 更新所有其他表单提交处理函数
+
+      document.getElementById("addStudentForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const studentID = document.getElementById("studentID").value.trim();
+        const name = document.getElementById("name").value.trim();
+        const age = document.getElementById("age").value.trim();
+        const houseID = document.getElementById("houseID").value.trim();
+
+        try {
+          const response = await fetch("http://localhost:3300/student", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ studentID, name, age, houseID }),
+          });
+
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error adding student: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error adding student: ${error.message}`);
+        }
+      };
+
+      document.getElementById("addEventForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const eventName = document.getElementById("eventName").value.trim();
+        const scoreType = document.getElementById("scoreType").value;
+
+        try {
+          const response = await fetch("http://localhost:3300/event", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ eventName, scoreType }),
+          });
+
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error adding event: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error adding event: ${error.message}`);
+        }
+      };
+
+      document.getElementById("addResultForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const studentID = document
+          .getElementById("studentIDResult")
+          .value.trim();
+        const eventID = document.getElementById("eventIDResult").value.trim();
+        const score = document.getElementById("scoreResult").value.trim();
+
+        try {
+          const response = await fetch("http://localhost:3300/result", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ studentID, eventID, score }),
+          });
+
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error adding result: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error adding result: ${error.message}`);
+        }
+      };
+
+      document.getElementById("deleteStudentForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const studentID = document
+          .getElementById("deleteStudentID")
+          .value.trim();
+
+        try {
+          const response = await fetch(
+            `http://localhost:3300/student/${encodeURIComponent(studentID)}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error deleting student: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error deleting student: ${error.message}`);
+        }
+      };
+
+      document.getElementById("deleteEventForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const eventID = document.getElementById("deleteEventID").value.trim();
+
+        try {
+          const response = await fetch(
+            `http://localhost:3300/event/${encodeURIComponent(eventID)}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error deleting event: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error deleting event: ${error.message}`);
+        }
+      };
+
+      document.getElementById("deleteScoreForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const scoreID = document.getElementById("deleteScoreID").value.trim();
+
+        try {
+          const response = await fetch(
+            `http://localhost:3300/score/${encodeURIComponent(scoreID)}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error deleting score: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error deleting score: ${error.message}`);
+        }
+      };
+
+      async function deleteAllScores() {
+        if (
+          confirm(
+            "Are you sure you want to delete all grade records? This action cannot be undone!"
+          )
+        ) {
+          try {
+            const response = await fetch("http://localhost:3300/scores", {
+              method: "DELETE",
+            });
+            const resultText = await response.text();
+            if (response.ok) {
+              openModal(resultText);
+            } else {
+              openModal(`Error deleting all scores: ${resultText}`);
+            }
+          } catch (error) {
+            openModal(`Error deleting all scores: ${error.message}`);
+          }
+        }
+      }
+
+      document.getElementById("editStudentForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const studentID = document.getElementById("editStudentID").value.trim();
+        const name = document.getElementById("editName").value.trim();
+        const age = document.getElementById("editAge").value.trim();
+        const houseID = document.getElementById("editHouseID").value.trim();
+
+        const body = {};
+        if (name) body.name = name;
+        if (age) body.age = age;
+        if (houseID) body.houseID = houseID;
+
+        try {
+          const response = await fetch(
+            `http://localhost:3300/student/${encodeURIComponent(studentID)}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            }
+          );
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error updating student: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error updating student: ${error.message}`);
+        }
+      };
+
+      document.getElementById("editEventForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const eventID = document.getElementById("editEventID").value.trim();
+        const eventName = document.getElementById("editEventName").value.trim();
+        const scoreType = document.getElementById("editScoreType").value;
+
+        const body = {};
+        if (eventName) body.eventName = eventName;
+        if (scoreType) body.scoreType = scoreType;
+
+        try {
+          const response = await fetch(
+            `http://localhost:3300/event/${encodeURIComponent(eventID)}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            }
+          );
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error updating event: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error updating event: ${error.message}`);
+        }
+      };
+
+      document.getElementById("editScoreForm").onsubmit = async function (
+        event
+      ) {
+        event.preventDefault(); // 防止页面刷新
+        const scoreID = document.getElementById("editScoreID").value.trim();
+        const score = document.getElementById("editScore").value.trim();
+
+        try {
+          const response = await fetch(
+            `http://localhost:3300/score/${encodeURIComponent(scoreID)}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ score }),
+            }
+          );
+          const resultText = await response.text();
+          if (response.ok) {
+            openModal(resultText);
+          } else {
+            openModal(`Error updating score: ${resultText}`);
+          }
+        } catch (error) {
+          openModal(`Error updating score: ${error.message}`);
+        }
+      };
+
+      function downloadReport(url, fileName) {
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((text) => {
+                throw new Error(text);
+              });
+            }
+            return response.blob();
+          })
+          .then((blob) => {
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+          })
+          .catch((error) => {
+            console.error("Error downloading the report:", error);
+            openModal(`Error downloading the report: ${error.message}`);
+          });
+      }
+
+      function downloadStudentReport() {
+        downloadReport(
+          "http://localhost:3300/generate-student-report",
+          "Student_Report.pdf"
+        );
+      }
+
+      function downloadEventReport() {
+        downloadReport(
+          "http://localhost:3300/generate-event-report",
+          "Event_Report.pdf"
+        );
+      }
+
+      function downloadAllScoresReport() {
+        downloadReport(
+          "http://localhost:3300/generate-all-scores-report",
+          "All_Scores_Report.pdf"
+        );
+      }
+
+      function downloadStudentsByHouse() {
+        const houseName = document.getElementById("houseNameIP").value.trim();
+        if (houseName) {
+          downloadReport(
+            `http://localhost:3300/generate-students-by-house/${encodeURIComponent(
+              houseName
+            )}`,
+            `Students_by_House_${houseName}.pdf`
+          );
+        } else {
+          openModal("The House Name is required");
+        }
+      }
+
+      function downloadScoresByStudent() {
+        const studentId = document
+          .getElementById("studentIdInput")
+          .value.trim();
+        if (studentId) {
+          downloadReport(
+            `http://localhost:3300/generate-scores-by-student/${encodeURIComponent(
+              studentId
+            )}`,
+            `Scores_by_Student_${studentId}.pdf`
+          );
+        } else {
+          openModal("The Student ID is required");
+        }
+      }
+
+      function downloadParticipantsByEvent() {
+        const eventId = document.getElementById("eventIdIP").value.trim();
+        if (eventId) {
+          downloadReport(
+            `http://localhost:3300/generate-participants-by-event/${encodeURIComponent(
+              eventId
+            )}`,
+            `Participants_by_Event_${eventId}.pdf`
+          );
+        } else {
+          openModal("The Event ID is required");
+        }
+      }
+    </script>
+  </body>
+</html>
