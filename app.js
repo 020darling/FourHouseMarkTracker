@@ -529,8 +529,8 @@ app.get("/generate-all-scores-report", (req, res) => {
   `;
   connection.query(query, (err, results) => {
     if (err) {
-      console.error("查询时出错:", err);
-      res.status(500).send("查询时出错");
+      console.error("ERROR:", err);
+      res.status(500).send("ERROR");
       return;
     }
 
@@ -741,7 +741,7 @@ app.get("/house-scores", (req, res) => {
 
     const result = {
       scores,
-      leader: leadingTeams.length > 1 ? "平手" : leadingTeams[0],
+      leader: leadingTeams.length > 1 ? "FAIR" : leadingTeams[0],
     };
 
     res.json(result);
@@ -753,7 +753,7 @@ function calculateHouseScores(callback) {
 
   connection.query(houseQuery, (err, houses) => {
     if (err) {
-      console.error("查询错误:", err);
+      console.error("ERROR:", err);
       return callback(err);
     }
 
@@ -773,7 +773,7 @@ function calculateHouseScores(callback) {
 
     connection.query(scoreQuery, (err, results) => {
       if (err) {
-        console.error("查询错误:", err);
+        console.error("ERROR:", err);
         return callback(err);
       }
 
