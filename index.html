@@ -141,7 +141,7 @@
           const data = await response.json();
           updateScores(data);
         } catch (error) {
-          console.error("获取分数时出错:", error);
+          console.error("ERROR:", error);
         }
       }
 
@@ -167,7 +167,6 @@
         ).textContent = `LEADING HOUSE: ${leader}`;
       }
 
-      // 每2分钟获取一次分数
       fetchScores();
       setInterval(fetchScores, 120000);
     </script>
