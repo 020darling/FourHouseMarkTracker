@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FOUR HOUSE MARK TRACKER</title>
     <style>
-      /* 原有的样式 */
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
@@ -644,34 +643,27 @@
     </main>
 
     <script>
-      /* 用于控制菜单和功能的切换 */
       function showCategory(categoryMenuId) {
-        // 隐藏主菜单
         document.getElementById("mainMenu").classList.add("hidden");
-        // 隐藏所有菜单和功能
         hideAllMenusAndFunctions();
-        // 显示对应的类别菜单
         document.getElementById(categoryMenuId).classList.remove("hidden");
       }
 
       function showFunction(functionId) {
-        // 隐藏所有菜单和功能
         hideAllMenusAndFunctions();
-        // 显示对应的功能界面
+
         document.getElementById(functionId).classList.remove("hidden");
       }
 
       function goBack() {
-        // 隐藏所有菜单和功能
         hideAllMenusAndFunctions();
-        // 显示主菜单
+
         document.getElementById("mainMenu").classList.remove("hidden");
       }
 
       function goBackToMenu(menuId) {
-        // 隐藏所有菜单和功能
         hideAllMenusAndFunctions();
-        // 显示对应的类别菜单
+
         document.getElementById(menuId).classList.remove("hidden");
       }
 
@@ -736,10 +728,8 @@
         }
       }
 
-      // 更新所有表单提交的处理函数，以正确处理错误
-
       document.getElementById("uploadForm").onsubmit = async function (event) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const fileInput = document.getElementById("csvFile");
         const formData = new FormData();
         formData.append("file", fileInput.files[0]);
@@ -761,12 +751,10 @@
         }
       };
 
-      // 更新所有其他表单提交处理函数
-
       document.getElementById("addStudentForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const studentID = document.getElementById("studentID").value.trim();
         const name = document.getElementById("name").value.trim();
         const age = document.getElementById("age").value.trim();
@@ -793,7 +781,7 @@
       document.getElementById("addEventForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const eventName = document.getElementById("eventName").value.trim();
         const scoreType = document.getElementById("scoreType").value;
 
@@ -818,7 +806,7 @@
       document.getElementById("addResultForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const studentID = document
           .getElementById("studentIDResult")
           .value.trim();
@@ -846,7 +834,7 @@
       document.getElementById("deleteStudentForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const studentID = document
           .getElementById("deleteStudentID")
           .value.trim();
@@ -873,7 +861,7 @@
       document.getElementById("deleteEventForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const eventID = document.getElementById("deleteEventID").value.trim();
 
         try {
@@ -898,7 +886,7 @@
       document.getElementById("deleteScoreForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const scoreID = document.getElementById("deleteScoreID").value.trim();
 
         try {
@@ -945,7 +933,7 @@
       document.getElementById("editStudentForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const studentID = document.getElementById("editStudentID").value.trim();
         const name = document.getElementById("editName").value.trim();
         const age = document.getElementById("editAge").value.trim();
@@ -979,7 +967,7 @@
       document.getElementById("editEventForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const eventID = document.getElementById("editEventID").value.trim();
         const eventName = document.getElementById("editEventName").value.trim();
         const scoreType = document.getElementById("editScoreType").value;
@@ -1011,7 +999,7 @@
       document.getElementById("editScoreForm").onsubmit = async function (
         event
       ) {
-        event.preventDefault(); // 防止页面刷新
+        event.preventDefault();
         const scoreID = document.getElementById("editScoreID").value.trim();
         const score = document.getElementById("editScore").value.trim();
 
